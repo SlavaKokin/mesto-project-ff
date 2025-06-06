@@ -1,5 +1,5 @@
 .popup_is-opened {
-  display: flex;
+  /*display: flex; убрали*/
   visibility: visible;
   opacity: 1;
   pointer-events: all;
