@@ -19,8 +19,7 @@
   },
   "homepage": "https://github.com/SlavaKokin/mesto-project-ff#readme",
   "dependencies": {
-    "core-js": "^3.42.0",
-    "jquery": "^3.7.1"
+    "core-js": "^3.42.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",

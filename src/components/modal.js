@@ -2,22 +2,21 @@
 // Функция открытия
 export function openModal(popup) {
   popup.classList.add('popup_is-opened');
-  addEscListener(popup);
-}
+  document.addEventListener('keydown', closeByEsc);
+};
 
 // Функция закрытия
 export function closeModal(popup) {
   popup.classList.remove('popup_is-opened');
-}
-
+  document.removeEventListener('keydown', closeByEsc);
+};
 
 // закрытие при клике на Escape
-export function addEscListener(popup) {
-  const onEsc = (evt) => {
-    if (evt.key === 'Escape') {
-      closeModal(popup);
-      document.removeEventListener('keydown', onEsc);
+function closeByEsc(evt) {
+    if (evt.key === "Escape") {
+      const openedPopup = document.querySelector('.popup_is-opened');
+      if (openedPopup) {
+      closeModal(openedPopup);
+    } 
     }
-  };
-  document.addEventListener('keydown', onEsc);
-};
+};  

@@ -2,6 +2,7 @@
 import "./pages/index.css";
 import { initialCards } from "./components/cards.js"; // Импорт массива карточек
 import { openModal, closeModal } from "./components/modal.js"; // Импорт функций открытия и закрытия
+import { createCard, handleLikeButtonClick, deleteCard } from "./components/card.js";
 
 //2)Глобальные переменные
 // Элементы карточки
@@ -35,57 +36,18 @@ const cardFormElement = document.querySelector('.popup__form[name="new-place"]')
 const placeInput = cardFormElement.querySelector('input[name="place-name"]');
 const linkInput = cardFormElement.querySelector('input[name="link"]');
 
-//3)Функции
+//3) Обработчики
 // Обработчик клика по изображению карточки
-function handleImageClick(evt) {
-  const imgSrc = evt.target.src;
-  const imgAlt = evt.target.alt;
-  imagePopupImage.src = imgSrc;
-  imagePopupImage.alt = imgAlt;
-  imagePopupCaption.textContent = imgAlt;
+function handleImage({ name, link }) {
+  imagePopupImage.src = link;
+  imagePopupImage.alt = name;
+  imagePopupCaption.textContent = name;
   openModal(imagePopup);
-};
-
-//Функция создания карточки
-function createCard(dataCard, deleteCard, handleLike, handleImage) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  const cardImage = cardElement.querySelector('.card__image');
-  const cardTitle = cardElement.querySelector('.card__title');
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-  const likeButton = cardElement.querySelector('.card__like-button');
-
-  cardImage.src = dataCard.link;
-  cardImage.alt = dataCard.name;
-  cardTitle.textContent = dataCard.name;
-
-  //Обработчик кнопки удаления
-  deleteButton.addEventListener('click', () => {
-    deleteCard(cardElement);
-  });
-
-  // Обработчик лайка
-  likeButton.addEventListener('click', handleLike);
-
-  // Обработчик клика по изображению
-  if (handleImage) {
-    cardImage.addEventListener('click', handleImage);
-  };
-  return cardElement;
-};
-
-//Обработчик кнопки лайка
-function handleLikeButtonClick(event) {
-  event.target.classList.toggle('card__like-button_is-active');
-}
-
-//Функция удаления карточки
-function deleteCard(cardElement) {
-  cardElement.remove();
 };
 
 //Вывести карточки на страницу
 initialCards.forEach(dataCard => {
-  const cardElement =  createCard(dataCard, deleteCard, handleLikeButtonClick, handleImageClick);
+  const cardElement = createCard(dataCard, deleteCard, handleLikeButtonClick, handleImage, cardTemplate);
   cardContainer.append(cardElement);
 });
 
@@ -93,7 +55,10 @@ initialCards.forEach(dataCard => {
 // Обработчик для открытия окна с изображением
 cardList.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('card__image')) {
-    handleImageClick(evt);
+    const card = evt.target.closest('.card');
+    const name = card.querySelector('.card__title').textContent;
+    const link = evt.target.src;
+    handleImage({ name, link });
   }
 });
 
@@ -115,10 +80,8 @@ addPopupButton.addEventListener('click', () => {
 
 // Обработчик кнопки закрытия модального окна
 document.querySelectorAll('.popup__close').forEach((closeButton) => {
-  closeButton.addEventListener('click', () => {
-    const popup = closeButton.closest('.popup');
-    closeModal(popup);
-  });
+  const popup = closeButton.closest('.popup');
+  closeButton.addEventListener('click', () => closeModal(popup));
 });
 
 // Обработчик закрытия модального по оверлею
@@ -147,7 +110,7 @@ cardFormElement.addEventListener('submit', (evt) => {
     name: placeName,
     link: link
   }; 
-  const newCard = createCard(newCardData, deleteCard, handleLikeButtonClick, handleImageClick);
+  const newCard = createCard(newCardData, deleteCard, handleLikeButtonClick, handleImage, cardTemplate);
   cardContainer.prepend(newCard);// Вставляем новые данные
   evt.target.reset(); // Очистка формы
   closeModal(addPopup); // Закрытие попапа
