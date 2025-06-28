@@ -1,0 +1,10 @@
+.popup__error {
+  color: red;
+  font-size: 12px; 
+  margin-top: 4px; 
+  display: block;
+}
+
+.popup__input_type_error {
+  border-bottom: 2px solid red; 
+}

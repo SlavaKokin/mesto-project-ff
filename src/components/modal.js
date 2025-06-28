@@ -8,6 +8,13 @@ export function openModal(popup) {
 // Функция закрытия
 export function closeModal(popup) {
   popup.classList.remove('popup_is-opened');
+  
+  // Очистка формы при закрытии, если это форма обновления аватара
+  if (popup.classList.contains('popup_type_update-avatar')) {
+    const form = popup.querySelector('.popup__form');
+    form.reset();
+  }
+
   document.removeEventListener('keydown', closeByEsc);
 };
 
@@ -19,4 +26,4 @@ function closeByEsc(evt) {
       closeModal(openedPopup);
     } 
     }
-};  
+};
