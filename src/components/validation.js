@@ -91,7 +91,9 @@ export function clearValidation(form, config) {
   });
 
   if (submitButton) {
-    submitButton.classList.add(inactiveButtonClass);
-    submitButton.disabled = true;
+    // Получаем список всех input элементов в форме
+    const inputList = Array.from(form.querySelectorAll(inputSelector));
+    // Вызываем toggleButtonState для деактивации кнопки
+    toggleButtonState(inputList, submitButton, inactiveButtonClass);
   }
 }

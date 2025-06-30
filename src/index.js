@@ -63,13 +63,13 @@ editPopupButton.addEventListener('click', () => {
   openModal(editPopup);
 });
 addPopupButton.addEventListener('click', () => {
+  addPopup.querySelector('.popup__form').reset();  
   clearValidation(addPopup, validationConfig);
-  addPopup.querySelector('.popup__form').reset();
   openModal(addPopup);
 });
 updateAvatarButton.addEventListener('click', () => {
-  avatarForm.reset();
   clearValidation(avatarForm, validationConfig);
+  avatarForm.reset();
   openModal(avatarPopup);
 });
 
@@ -104,11 +104,11 @@ profileFormElement.addEventListener('submit', (evt) => {
     .then((updatedUserData) => {
       profileTitle.textContent = updatedUserData.name;
       profileDescription.textContent = updatedUserData.about;
+      closeModal(editPopup);
     })
     .catch((err) => console.error(`Ошибка обновления профиля: ${err}`))
     .finally(() => {
       saveButton.textContent = 'Сохранить';
-      closeModal(editPopup);
     });
 });
 
@@ -148,11 +148,11 @@ avatarForm.addEventListener('submit', (evt) => {
       if (profileImage) {
         profileImage.style.backgroundImage = `url(${updatedUserData.avatar})`;
       }
+      closeModal(avatarPopup);
     })
     .catch((err) => console.error(`Ошибка обновления аватара: ${err}`))
     .finally(() => {
       saveButton.textContent = 'Сохранить';
-      closeModal(avatarPopup);
     });
 });
 
